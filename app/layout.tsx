@@ -11,7 +11,7 @@ const fontSans = FontSans({
 
 export const metadata: Metadata={
   title: "LiveDocs✨",
-  description: "A live documentation site",
+  description: "A live collabrator document editor",
   // image: "/og.png",
   // url: "https://myapp.com",
 }
