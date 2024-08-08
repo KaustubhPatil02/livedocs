@@ -1,9 +1,6 @@
 
 
 ## Project Structure
-
-First, run the development server:
-
 ```bash
 .
 ├── app
