@@ -1,10 +1,11 @@
+import { Editor } from '@/components/editor/Editor'
 import { Button } from '@/components/ui/button'
 import React from 'react'
 
 const page = () => {
   return (
     <div>
-      <Button>Hell there!</Button>
+      <Editor />
     </div>
   )
 }
