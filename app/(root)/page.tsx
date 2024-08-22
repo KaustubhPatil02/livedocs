@@ -1,6 +1,7 @@
 import { Editor } from '@/components/editor/Editor'
 import Header from '@/components/Header'
 import { Button } from '@/components/ui/button'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import React from 'react'
 
 const page = () => {
@@ -12,6 +13,12 @@ const page = () => {
               A Static Page
             </p>
         </div>
+        <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
       </Header>
       <Editor />
     </div>
