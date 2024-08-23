@@ -12,9 +12,9 @@ const Header = ({ children }: HeaderProps) => {
         <Image
           src={logo}
           alt='logo'
-          width={120}
-          height={32}
-          className='hidden md:block md:mr-0 mr-2'
+          width={80}
+          height={12}
+          className='hidden mr-2 md:block md:mr-0'
         />
       </Link>
       {children}

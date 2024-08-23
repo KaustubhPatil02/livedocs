@@ -1,9 +1,15 @@
+import { Editor } from '@/components/editor/Editor'
+import Header from '@/components/Header'
+import { Button } from '@/components/ui/button'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import React from 'react'
 
-const Document = () => {
+const page = () => {
   return (
-    <div>Document</div>
+    <div>
+     
+    </div>
   )
 }
 
-export default Document
+export default page
