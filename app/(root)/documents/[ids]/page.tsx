@@ -7,6 +7,15 @@ import React from 'react'
 const page = () => {
   return (
     <div>
+      {/* <Header children={undefined} /> */}
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <Editor />
+      <Button>Click me</Button>
      
     </div>
   )
