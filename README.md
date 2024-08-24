@@ -27,3 +27,4 @@
 
 ```
 
+![liveBlocks](/public/access-token-auth-diagram.webp)
