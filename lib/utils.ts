@@ -26,7 +26,7 @@ export const dateConverter = (timestamp: string): string => {
   const now: Date = new Date();
 
   const diff: number = now.getTime() - date.getTime();
-  const diffInSeconds: number = diff / 1000;
+  const diffInSeconds: number = diff / 1000; 
   const diffInMinutes: number = diffInSeconds / 60;
   const diffInHours: number = diffInMinutes / 60;
   const diffInDays: number = diffInHours / 24;

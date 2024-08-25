@@ -1,5 +1,5 @@
 import { Editor } from '@/components/editor/Editor'
-import Header from '@/components/ui/Header'
+import Header from '@/components/docActions/Header'
 import React from 'react'
 
 const Document = () => {
