@@ -1,23 +1,25 @@
+//react arrow function component (rafce)
 import { Editor } from '@/components/editor/Editor'
-import Header from '@/components/Header'
 import { Button } from '@/components/ui/button'
+import Header from '@/components/ui/Header'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import React from 'react'
 
-const Document = () => {
+
+const Home = () => {
   return (
-    <div> 
-      <Header />
+    <div>
+      {/* <Header />
     <SignedIn>
       <UserButton />
     </SignedIn>
     <SignedOut>
       <SignInButton />
     </SignedOut>
-    <Editor />
+    <Editor /> */}
     <Button>Click me</Button>
     </div>
   )
 }
 
-export default Document
+export default Home

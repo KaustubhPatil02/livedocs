@@ -3,9 +3,9 @@ import { Inter as FontSans } from "next/font/google"
 
 import { cn } from "@/lib/utils"
 import { Metadata } from "next"
+// import { ClerkProvider } from "@clerk/nextjs"
 import { ClerkProvider } from "@clerk/nextjs"
 import { dark } from "@clerk/themes"
-import { Lightbulb } from "lucide-react"
 import Provider from "@/Provider"
 
 const fontSans = FontSans({
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       appearance={{
         baseTheme: dark,
         variables: {
-          colorPrimary: "#3371EF",
+          colorPrimary: "#3371FF",
           fontSize: "16px",
         },
       }}
@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* <head /> */}
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            "min-h-screen  font-sans antialiased",
             fontSans.variable
           )}
         >
@@ -44,6 +44,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </Provider>
         </body>
       </html>
-    </ClerkProvider>
+     </ClerkProvider>
   )
 }

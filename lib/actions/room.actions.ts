@@ -1,4 +1,4 @@
-' use server ';
+'use server';
 
 // Import necessary modules and functions
 import { nanoid } from 'nanoid'; // For generating unique IDs
