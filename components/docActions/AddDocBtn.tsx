@@ -11,12 +11,12 @@ const AddDocBtn = ({userId, email} :AddDocumentBtnProps ) => {
     try {
      const room = await createDocument({userId, email})
 
-     if(room) {
-       console.log('Room created', room)
-     }
-     if(!room) {
-       console.log('Room not created')
-     }
+    //  if(room) {
+    //    console.log('Room created', room)
+    //  }
+    //  if(!room) {
+    //    console.log('Room not created')
+    //  }
      if(room) router.push(`/documents/${room.id}`)
       
     } catch (error) {

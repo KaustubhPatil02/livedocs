@@ -3,17 +3,20 @@
 import { ClientSideSuspense, LiveblocksProvider } from '@liveblocks/react'
 import { ReactNode } from 'react'
 import Loader from './components/Loader'
+import { getClerkUsers } from './lib/actions/users.actions'
 
-const Provider = ({children} :{ children: ReactNode}) => {
+const Provider = ({ children }: { children: ReactNode }) => {
   return (
-    <LiveblocksProvider authEndpoint= "/api/liveBlocks-auth">
-      {/* <RoomProvider id="my-room"> */}
-        <ClientSideSuspense fallback={<Loader />
-            // <div>Loading…</div>
-            }>
-                {/* Loading… */}
-          {children}
-        </ClientSideSuspense>
+    <LiveblocksProvider
+      resolveUsers={async ({ userIds }) => {
+        const users = await getClerkUsers({ userIds });
+        return users;
+      }}
+      authEndpoint="/api/liveblocks-auth">
+      <ClientSideSuspense fallback={<Loader />}>
+        {/* Loading… */}
+        {children}
+      </ClientSideSuspense>
       {/* </RoomProvider> */}
     </LiveblocksProvider>
   )
