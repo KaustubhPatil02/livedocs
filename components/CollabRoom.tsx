@@ -1,49 +1,108 @@
 'use client'
 
 import { ClientSideSuspense, RoomProvider } from '@liveblocks/react'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Editor } from '@/components/editor/Editor'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import Header from './docActions/Header'
 import ActiveCollabs from './ActiveCollabs'
+import { Input } from './ui/input'
+import { currentUser } from '@clerk/nextjs/server'
+import Image from 'next/image'
+import editImg from '../public/assets/icons/edit.svg'
 
-const CollabRoom = ({ roomId, roomMetadata}: CollaborativeRoomProps) => {
+const CollabRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
+  const currentUserType = 'editor'
   const [editing, setediting] = useState(false);
   const [loading, setloading] = useState(false);
   const [doctitle, setdoctitle] = useState(roomMetadata.title);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const inpputRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // keys
+  const updateTitleHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setediting(false);
+      setloading(true);
+      // update title
+      setloading(false);
+    }
+  }
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if(containerRef.current && !containerRef.current.contains(e.target as Node) && editing) {
+        setediting(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+  },[])
   return (
     <RoomProvider id={roomId}>
-        <ClientSideSuspense fallback={<div>Loading…</div>}>
-          <div className='collaborative-room'>
+      <ClientSideSuspense fallback={<div>Loading…</div>}>
+        <div className='collaborative-room'>
           <Header>
-        <div ref={containerRef} className='flex w-fit items-center justify-center gap-2'>
-            {/* <p className='document-title'>
+            <div ref={containerRef} className='flex w-fit items-center justify-center gap-2'>
+              {/* <p className='document-title'>
               A Static Page
             </p> */}
-            //TODO: add dynamic block for title
+              {/* //TODO: add dynamic block for title */}
+              {editing && !loading ? (
+                <Input
+                  className='document-title-input'
+                  type='text'
+                  value={doctitle}
+                  ref={inputRef}
+                  placeholder='Enter title'
+                  onChange={(e) => setdoctitle(e.target.value)}
+                  onKeyDown={updateTitleHandler}
+                  disabled={!editing}
+                />
+              ) : (
+                <>
+                  <p className='document-title'>{doctitle}</p>
+                </>
+              )}
+
+              {currentUserType === 'editor' && !editing && (
+                <Image
+                  src={editImg}
+                  alt='edit-title'
+                  width={20}
+                  height={20}
+                  onClick={() => setediting(true)}
+                  className='pointer'
+                />
+              )}
+
+              {currentUserType !== 'editor' && !editing && (
+                <p className='view-only-tag'>View Only</p>
+              )}
+              
+              {loading && <p className='text-sm text-white'>Please wait...</p>}
+            </div>
+
+            <div className='flex w-full flex-1 justify-end gap-3'>
+              <ActiveCollabs />
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+
+
+          </Header>
+          <Editor />
+
         </div>
-
-        <div className='flex w-full flex-1 justify-end gap-3'>
-          <ActiveCollabs />
-        <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        </div>
-
-        
-      </Header>
-      <Editor />
-
-          </div>
-        </ClientSideSuspense>
-      </RoomProvider>
+      </ClientSideSuspense>
+    </RoomProvider>
   )
 }
 
