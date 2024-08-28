@@ -45,13 +45,14 @@ const CollabRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
     const handleClickOutside = (e: MouseEvent) => {
       if(containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setediting(false);
+        updateDocument(roomId, doctitle);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     }
-  },[])
+  },[roomId, doctitle])
 
   useEffect(() =>{
     if(editing && inputRef.current) {
@@ -102,7 +103,7 @@ const CollabRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
                 <p className='view-only-tag'>View Only</p>
               )}
               
-              {loading && <p className='text-sm text-white'>Please wait...</p>}
+              {loading && <p className='text-sm text-white'>Updating please wait...</p>}
             </div>
 
             <div className='flex w-full flex-1 justify-end gap-3'>

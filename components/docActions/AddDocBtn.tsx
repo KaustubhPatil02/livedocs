@@ -38,7 +38,7 @@ const AddDocBtn = ({userId, email} :AddDocumentBtnProps ) => {
         height={20}
       />
       <p className='hidden sm:block'>
-        Create your first document!
+        Create a blank document!
       </p>
     </Button>
   )
