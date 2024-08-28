@@ -11,6 +11,7 @@ import { Input } from './ui/input'
 import { currentUser } from '@clerk/nextjs/server'
 import Image from 'next/image'
 import editImg from '../public/assets/icons/edit.svg'
+import { updateDocument } from '@/lib/actions/room.actions'
 
 const CollabRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
   const currentUserType = 'editor'
@@ -22,17 +23,27 @@ const CollabRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // keys
-  const updateTitleHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const updateTitleHandler = async (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setediting(false);
       setloading(true);
-      // update title
-      setloading(false);
+      try {
+        if(doctitle !== roomMetadata.title) {
+         const updatedDocument = await updateDocument(roomId, doctitle);
+
+         if(updatedDocument) {
+           setloading(false);
+           setediting(false);
+        }
+      }
+      }
+       catch (error) {
+        console.error(error);        
     }
   }
+}
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if(containerRef.current && !containerRef.current.contains(e.target as Node) && editing) {
+      if(containerRef.current && !containerRef.current.contains(e.target as Node)) {
         setediting(false);
       }
     }
@@ -41,6 +52,14 @@ const CollabRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
       document.removeEventListener('mousedown', handleClickOutside);
     }
   },[])
+
+  useEffect(() =>{
+    if(editing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editing])
+
+
   return (
     <RoomProvider id={roomId}>
       <ClientSideSuspense fallback={<div>Loading…</div>}>
