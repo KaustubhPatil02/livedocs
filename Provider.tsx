@@ -14,7 +14,6 @@ const Provider = ({ children }: { children: ReactNode }) => {
       }}
       authEndpoint="/api/liveblocks-auth">
       <ClientSideSuspense fallback={<Loader />}>
-        {/* Loading… */}
         {children}
       </ClientSideSuspense>
       {/* </RoomProvider> */}

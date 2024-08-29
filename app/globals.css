@@ -35,6 +35,11 @@
   }
 }
 
+.light-font {
+  font-weight: 300;
+  color: #ffffff; /* Optional: Change color to a lighter shade */
+}
+
 @layer utilities {
   .text-28-semibold {
     @apply text-[28px] font-semibold;
@@ -46,6 +51,13 @@
   .gradient-blue {
     @apply bg-gradient-to-t from-blue-500 to-blue-400;
   }
+  .gradient-green {
+    @apply bg-gradient-to-t from-green-500 to-green-900;
+  }
+  .gradient-slate {
+    @apply bg-gradient-to-t from-slate-500 to-slate-300;
+  }
+
   .gradient-red {
     @apply bg-gradient-to-t from-red-500 to-red-400;
   }

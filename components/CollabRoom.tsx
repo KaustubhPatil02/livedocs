@@ -12,6 +12,7 @@ import { currentUser } from '@clerk/nextjs/server'
 import Image from 'next/image'
 import editImg from '../public/assets/icons/edit.svg'
 import { updateDocument } from '@/lib/actions/room.actions'
+import Loader from './Loader'
 
 const CollabRoom = ({ roomId, roomMetadata, users, currentUserType }: CollaborativeRoomProps) => {
   // const currentUserType = {currentUserType}
@@ -63,7 +64,7 @@ const CollabRoom = ({ roomId, roomMetadata, users, currentUserType }: Collaborat
 
   return (
     <RoomProvider id={roomId}>
-      <ClientSideSuspense fallback={<div>Loading…</div>}>
+      <ClientSideSuspense fallback={<div><Loader /></div>}>
         <div className='collaborative-room'>
           <Header>
             <div ref={containerRef} className='flex w-fit items-center justify-center gap-2'>

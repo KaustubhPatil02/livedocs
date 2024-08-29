@@ -51,7 +51,7 @@ const Home = async () => {
                 >
                   <div className='hidden rounded-md bg-dark-500 p-2 sm:block'>
                     <Image
-                      src='/assets/icons/doc.svg'
+                      src='/assets/icons/doclogo.svg'
                       alt='Document icon'
                       width={30}
                       height={30}
@@ -61,7 +61,10 @@ const Home = async () => {
                     <p className='line-clamp-1'>
                       {metadata.title}
                     </p>
-                    <p className='text-sm font-light text-blue-200'>Created @ {dateConverter(createdAt)}</p>
+                    <p className='text-sm font-light text-blue-200'>
+                      Created @ <span dangerouslySetInnerHTML={{ __html: dateConverter(createdAt) }} />
+                    </p>
+                    {/* <p className='text-sm font-light text-blue-200'>Created @ {dateConverter(createdAt)}</p> */}
                   </div>
                 </Link>
 
@@ -72,7 +75,7 @@ const Home = async () => {
       ) : (
         <div className='document-list-empty'>
           <Image
-            src="/assets/icons/doc.svg"
+            src="/assets/icons/doclogo.svg"
             alt='Document icon'
             width={40}
             height={40}

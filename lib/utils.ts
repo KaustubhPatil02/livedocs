@@ -31,19 +31,59 @@ export const dateConverter = (timestamp: string): string => {
   const diffInHours: number = diffInMinutes / 60;
   const diffInDays: number = diffInHours / 24;
 
+  const formattedDate = date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+
+  const formattedTime = date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  const formattedDateTime = `<span class="light-font">${formattedDate} ${formattedTime}</span>`;
+
   switch (true) {
     case diffInDays > 7:
-      return `${Math.floor(diffInDays / 7)} weeks ago`;
+      return `${Math.floor(diffInDays / 7)} weeks ago ${formattedDateTime}`;
     case diffInDays >= 1 && diffInDays <= 7:
-      return `${Math.floor(diffInDays)} days ago`;
+      return `${Math.floor(diffInDays)} days ago ${formattedDateTime}`;
     case diffInHours >= 1:
-      return `${Math.floor(diffInHours)} hours ago`;
+      return `${Math.floor(diffInHours)} hours ago ${formattedDateTime}`;
     case diffInMinutes >= 1:
-      return `${Math.floor(diffInMinutes)} minutes ago`;
+      return `${Math.floor(diffInMinutes)} minutes ago ${formattedDateTime}`;
     default:
-      return 'Just now';
+      return `Just now (${formattedDateTime})`;
   }
 };
+
+
+// export const dateConverter = (timestamp: string): string => {
+//   const timestampNum = Math.round(new Date(timestamp).getTime() / 1000);
+//   const date: Date = new Date(timestampNum * 1000);
+//   const now: Date = new Date();
+
+//   const diff: number = now.getTime() - date.getTime();
+//   const diffInSeconds: number = diff / 1000; 
+//   const diffInMinutes: number = diffInSeconds / 60;
+//   const diffInHours: number = diffInMinutes / 60;
+//   const diffInDays: number = diffInHours / 24;
+
+//   switch (true) {
+//     case diffInDays > 7:
+//       return `${Math.floor(diffInDays / 7)} weeks ago`;
+//     case diffInDays >= 1 && diffInDays <= 7:
+//       return `${Math.floor(diffInDays)} days ago`;
+//     case diffInHours >= 1:
+//       return `${Math.floor(diffInHours)} hours ago`;
+//     case diffInMinutes >= 1:
+//       return `${Math.floor(diffInMinutes)} minutes ago`;
+//     default:
+//       return 'Just now';
+//   }
+// };
 
 // Function to generate a random color in hex format, excluding specified colors
 export function getRandomColor() {
