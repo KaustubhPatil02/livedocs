@@ -4,6 +4,7 @@ import CollabRoom from '@/components/CollabRoom'
 import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { getDocument } from '@/lib/actions/room.actions'
+import { getClerkUsers } from '@/lib/actions/users.actions'
 
 const Document = async ({params: {id}}: SearchParamProps) => {
   const clerkUser = await currentUser()
@@ -16,16 +17,27 @@ const Document = async ({params: {id}}: SearchParamProps) => {
     userId: clerkUser.emailAddresses[0].emailAddress,
   });
 
-  if(!room)
-    redirect('/')
+  if(!room) redirect('/')
+
+    const userIds = Object.keys(room.usersAccesses);
+    const users = await getClerkUsers({userIds});
+    const usersData = users.map((user: User) =>({
+      ...user,
+      userType: room.usersAccesses[user.email]?.includes('room:write')
+      ? 'editor' :
+      'viewer'
+    }))
+
+    const currentUserType = room.usersAccesses[clerkUser.emailAddresses[0].emailAddress]?.includes('room:write')? 
+    'editor' : 'viewer';
 
   return (
     <main className='flex w-full flex-col items-center'>
       <CollabRoom
         roomId={id}
         roomMetadata={room.metadata}
-        users={room.users}
-        currentUserType={room.currentUserType}
+        users={usersData}
+        currentUserType={currentUserType}
       />
     </main>
   )

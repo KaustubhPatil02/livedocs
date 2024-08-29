@@ -9,6 +9,8 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 LIVEBLOCKS_SECRET_KEY=
 ```
 
-![!st look](/public//Collborative%20room%20-1st.png)
+![!st look](/public/Collborative%20room%20-1st.png)
+![2nd look](/public/HomePage.png)
+
 
 ![liveBlocks](/public/access-token-auth-diagram.webp)

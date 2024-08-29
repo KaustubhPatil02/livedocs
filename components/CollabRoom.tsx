@@ -13,8 +13,8 @@ import Image from 'next/image'
 import editImg from '../public/assets/icons/edit.svg'
 import { updateDocument } from '@/lib/actions/room.actions'
 
-const CollabRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
-  const currentUserType = 'editor'
+const CollabRoom = ({ roomId, roomMetadata, users, currentUserType }: CollaborativeRoomProps) => {
+  // const currentUserType = {currentUserType}
   const [editing, setediting] = useState(false);
   const [loading, setloading] = useState(false);
   const [doctitle, setdoctitle] = useState(roomMetadata.title);
@@ -118,7 +118,11 @@ const CollabRoom = ({ roomId, roomMetadata }: CollaborativeRoomProps) => {
 
 
           </Header>
-          <Editor />
+          <Editor
+            roomId={roomId}
+            // users={users}
+            currentUserType={currentUserType}
+          />
 
         </div>
       </ClientSideSuspense>
