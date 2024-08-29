@@ -31,11 +31,11 @@ export const dateConverter = (timestamp: string): string => {
   const diffInHours: number = diffInMinutes / 60;
   const diffInDays: number = diffInHours / 24;
 
-  const formattedDate = date.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  });
+  // const formattedDate = date.toLocaleDateString('en-GB', {
+  //   day: '2-digit',
+  //   month: '2-digit',
+  //   year: 'numeric',
+  // });
 
   const formattedTime = date.toLocaleTimeString('en-US', {
     hour: 'numeric',
@@ -43,7 +43,7 @@ export const dateConverter = (timestamp: string): string => {
     hour12: true,
   });
 
-  const formattedDateTime = `<span class="light-font">${formattedDate} ${formattedTime}</span>`;
+  const formattedDateTime = `<span class="light-font"> by  ${formattedTime}</span>`;
 
   switch (true) {
     case diffInDays > 7:

@@ -18,7 +18,7 @@ const Home = async () => {
   // instead of static documents, we will fetch the documents from the server liveblocks
   const roomDoc = await fetchDocument(clerkUser.emailAddresses[0].emailAddress);
 
-
+  const notificationHandler = () => {}
   return (
 
     <main className='home-container'>
@@ -29,6 +29,8 @@ const Home = async () => {
             alt='Notification icon'
             width={20}
             height={20}
+            // onClick={() => notificationHandler()}
+            className='pointer'
           />
           <SignedIn>
             <UserButton />
@@ -67,7 +69,7 @@ const Home = async () => {
                       {metadata.title}
                     </p>
                     <p className='text-sm font-light text-blue-200'>
-                      Created @ <span dangerouslySetInnerHTML={{ __html: dateConverter(createdAt) }} />
+                      Created At <span dangerouslySetInnerHTML={{ __html: dateConverter(createdAt) }} />
                     </p>
                     {/* <p className='text-sm font-light text-blue-200'>Created @ {dateConverter(createdAt)}</p> */}
                   </div>

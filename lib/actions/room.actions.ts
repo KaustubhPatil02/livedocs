@@ -42,7 +42,7 @@ export const createDocument = async ({ userId, email }: CreateDocumentParams) =>
     }
 };
 
-
+// getiing specific room
 export const getDocument = async ({ roomId, userId }: {roomId: string; userId: string}) => {
    try {
     const room = await liveblocks.getRoom(roomId);
@@ -60,6 +60,7 @@ export const getDocument = async ({ roomId, userId }: {roomId: string; userId: s
    }
 }
 
+// updating document
 export const updateDocument = async (roomId: string, title: string) => {
     try {
         // const room = await liveblocks.getRoom(roomId);
@@ -75,6 +76,7 @@ export const updateDocument = async (roomId: string, title: string) => {
     }
 }
 
+// fetching specific user documents
 export const fetchDocument = async (email :string) => {
     try {
      const rooms = await liveblocks.getRooms({userId: email});
@@ -86,3 +88,6 @@ export const fetchDocument = async (email :string) => {
      
     }
  }
+
+//  getting specific room users
+// export const getDocumentUsers = async (roomId: string) => {}
