@@ -24,7 +24,12 @@ const Home = async () => {
     <main className='home-container'>
       <Header className='sticky left-0 top-0'>
         <div className='flex items-center gap-2 lg:gap-4'>
-          Notify
+          <Image
+            src='/assets/icons/bell.svg'
+            alt='Notification icon'
+            width={20}
+            height={20}
+          />
           <SignedIn>
             <UserButton />
           </SignedIn>
