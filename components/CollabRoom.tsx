@@ -13,6 +13,7 @@ import Image from 'next/image'
 import editImg from '../public/assets/icons/edit.svg'
 import { updateDocument } from '@/lib/actions/room.actions'
 import Loader from './Loader'
+import ShareModal from './modals/ShareModal'
 
 const CollabRoom = ({ roomId, roomMetadata, users, currentUserType }: CollaborativeRoomProps) => {
   // const currentUserType = {currentUserType}
@@ -109,6 +110,12 @@ const CollabRoom = ({ roomId, roomMetadata, users, currentUserType }: Collaborat
 
             <div className='flex w-full flex-1 justify-end gap-3'>
               <ActiveCollabs />
+              <ShareModal
+                roomId={roomId}
+                collaborators={users}
+                currentUserType={currentUserType}
+                creatorId={roomMetadata.creatorId}
+              />
               <SignedOut>
                 <SignInButton />
               </SignedOut>
