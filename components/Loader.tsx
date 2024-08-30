@@ -9,7 +9,7 @@ const Loader = () => {
             alt='loader'
             width={32}
             height={32}
-            className='animate-spin'
+            className='animate-in'
             />
             Please Wait...
     </div>
