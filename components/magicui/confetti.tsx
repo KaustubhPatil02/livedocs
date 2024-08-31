@@ -93,6 +93,8 @@ const Confetti = forwardRef<ConfettiRef, Props>((props, ref) => {
   );
 });
 
+Confetti.displayName = "Confetti";
+
 interface ConfettiButtonProps extends ButtonProps {
   options?: ConfettiOptions &
     ConfettiGlobalOptions & { canvas?: HTMLCanvasElement };
@@ -114,7 +116,7 @@ function ConfettiButton({ options, children, ...props }: ConfettiButtonProps) {
   };
 
   return (
-    <div style={{ position: 'relative', color: 'transparent' }}>
+    <div style={{ position: 'relative' }}>
       <Button onClick={handleClick} {...props}>
         {children}
       </Button>
