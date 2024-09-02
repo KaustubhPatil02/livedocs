@@ -8,6 +8,7 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import UserTypesSelector from '../UserTypesSelector';
 import Collaborator from '../Collaborator';
+import { updateDocumentAccess } from '@/lib/actions/room.actions';
 
 const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: ShareDocumentDialogProps) => {
   const user = useSelf();
@@ -17,7 +18,12 @@ const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: Share
   const [email, setEmail] = useState('');
   const [userRole, setUserRole] = useState<UserType>('viewer');
 
-  const shareDocHandler = async () => { }
+  const shareDocHandler = async () => {
+    setLoading(true);
+    await updateDocumentAccess({ roomId, email, userType: userRole as UserType, updatedBy: user.info });
+
+    setLoading(false);
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,14 +44,14 @@ const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: Share
         <DialogHeader >
           <DialogTitle>Manage share permissions</DialogTitle>
           <DialogDescription>
-           With whom you want to share this document?
+            With whom you want to share this document?
           </DialogDescription>
         </DialogHeader>
         <Label
-          htmlFor='email' 
+          htmlFor='email'
           className='mt-7 text-blue-200'
         >
-         Email address 
+          Email address
         </Label>
         <div className='flex items-center gap-2'>
           <div className='flex flex-1 rounded-md b bg-dark-400'>
@@ -56,16 +62,16 @@ const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: Share
               onChange={(e) => setEmail(e.target.value)}
               className='share-input'
             />
-            <UserTypesSelector 
+            <UserTypesSelector
               userType={userRole}
               setUserType={setUserRole}
             />
           </div>
-          <Button 
-          className='gradient-blue flex h-full gap-1 px-4' 
-          disabled={loading}
-          type='submit'
-          onClick={shareDocHandler}
+          <Button
+            className='gradient-blue flex h-full gap-1 px-4'
+            disabled={loading}
+            type='submit'
+            onClick={shareDocHandler}
           >
             {loading ? 'Sharing...' : 'Share'}
           </Button>
@@ -85,12 +91,12 @@ const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: Share
               //   <p className='text-blue-200'>{collaborator.email}</p>
               // </li>
               <Collaborator
-              key={collaborator.id}
-              roomId={roomId}
-              creatorId={creatorId}
-              email={collaborator.email}
-              collaborator={collaborator}
-              user={user.info}
+                key={collaborator.id}
+                roomId={roomId}
+                creatorId={creatorId}
+                email={collaborator.email}
+                collaborator={collaborator}
+                user={user.info}
               />
             ))}
           </ul>

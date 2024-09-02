@@ -9,6 +9,8 @@ import { redirect } from 'next/navigation'
 import { fetchDocument } from '@/lib/actions/room.actions'
 import Link from 'next/link'
 import { dateConverter } from '@/lib/utils'
+import { DeleteModal } from '@/components/modals/DeleteModal'
+import Notifications from '@/components/Notifications'
 
 
 const Home = async () => {
@@ -18,20 +20,16 @@ const Home = async () => {
   // instead of static documents, we will fetch the documents from the server liveblocks
   const roomDoc = await fetchDocument(clerkUser.emailAddresses[0].emailAddress);
 
-  const notificationHandler = () => {}
+ 
+
+
+
   return (
 
     <main className='home-container'>
       <Header className='sticky left-0 top-0'>
         <div className='flex items-center gap-2 lg:gap-4'>
-          <Image
-            src='/assets/icons/bell.svg'
-            alt='Notification icon'
-            width={20}
-            height={20}
-            // onClick={() => notificationHandler()}
-            className='pointer'
-          />
+         <Notifications />
           <SignedIn>
             <UserButton />
           </SignedIn>
@@ -74,7 +72,7 @@ const Home = async () => {
                     {/* <p className='text-sm font-light text-blue-200'>Created @ {dateConverter(createdAt)}</p> */}
                   </div>
                 </Link>
-
+             <DeleteModal roomId={id} />
               </li>
             ))}
           </ul>
