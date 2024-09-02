@@ -9,11 +9,11 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 LIVEBLOCKS_SECRET_KEY=
 ```
 
-![!st look](/public/Collborative%20room%20-1st.png)
-![2nd look](/public/HomePage.png)
-![2nd look](/public/Final.png)
-![2nd look](/public/Notify.png)
-![2nd look](/public/delete.png)
+<!-- ![!st look](/public/Collborative%20room%20-1st.png) -->
+![HomePage](/public/HomePage.png)
+![Final Outcome](/public/Final.png)
+![Notification](/public/Notify.png)
+![Delete Doc](/public/delete.png)
 
 
 
