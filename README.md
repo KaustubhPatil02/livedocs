@@ -12,7 +12,7 @@ LIVEBLOCKS_SECRET_KEY=
 <!-- ![!st look](/public/Collborative%20room%20-1st.png) -->
 ![HomePage](/public/HomePage.png)
 ![Final Outcome](/public/Final.png)
-![Notification](/public/Notify.png)
+![Notification](/public/notify.png)
 ![Delete Doc](/public/delete.png)
 
 
