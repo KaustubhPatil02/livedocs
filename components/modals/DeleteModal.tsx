@@ -18,11 +18,26 @@ import {
 
 import { Button } from "../ui/button";
 
-export const DeleteModal = ({ roomId }: DeleteModalProps) => {
+// interface DeleteModalProps {
+//   roomId: string;
+//   currentUserId: string;
+//   creatorId: string;
+// }
+
+export const DeleteModal = ({ roomId, currentUserId, creatorId }: DeleteModalProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const deleteDocumentHandler = async () => {
+    if (currentUserId !== creatorId) {
+    <>
+    <DialogContent>
+    You do not have permission to delete this document."
+    </DialogContent>
+    </>
+      return;
+    }
+
     setLoading(true);
 
     try {

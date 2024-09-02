@@ -75,6 +75,6 @@ declare type SearchParamProps = {
     email: string;
   };
   
-  declare type DeleteModalProps = { roomId: string };
+  declare type DeleteModalProps = { roomId: string, currentUserId: string, creatorId:string };
   
   declare type ThreadWrapperProps = { thread: ThreadData<BaseMetadata> };
