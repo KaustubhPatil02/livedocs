@@ -32,7 +32,7 @@ export const DeleteModal = ({ roomId, currentUserId, creatorId }: DeleteModalPro
     if (currentUserId !== creatorId) {
     <>
     <DialogContent>
-    You do not have permission to delete this document."
+    You do not have permission to delete this document.
     </DialogContent>
     </>
       return;
@@ -44,7 +44,7 @@ export const DeleteModal = ({ roomId, currentUserId, creatorId }: DeleteModalPro
       await deleteDocument(roomId);
       setOpen(false);
     } catch (error) {
-      console.log("Error notif:", error);
+      console.log("Error notify:", error);
     }
 
     setLoading(false);
