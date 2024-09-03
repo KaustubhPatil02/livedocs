@@ -22,12 +22,6 @@ const Notifications = () => {
     console.log(`Notification ${notificationId} clicked`);
   };
 
-  const handleClearNotifications = () => {
-    // Clear all notifications
-    setReadNotifications(inboxNotifications.map(notification => notification.id));
-    console.log('All notifications cleared');
-  };
-
   const unreadNotifications = inboxNotifications.filter((notification) => !notification.readAt && !readNotifications.includes(notification.id));
 
   return (
@@ -51,15 +45,6 @@ const Notifications = () => {
             )
           }}
         >
-          <div className="flex justify-between items-center p-2">
-            <span className="text-sm font-semibold text-white">Notifications</span>
-            <button 
-              className="text-sm text-blue-500 hover:underline"
-              onClick={handleClearNotifications}
-            >
-              Clear All
-            </button>
-          </div>
           <InboxNotificationList>
             {inboxNotifications.length <= 0 && (
               <p className="py-2 text-center text-dark-500">No new notifications</p>

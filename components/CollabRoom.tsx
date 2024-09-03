@@ -65,57 +65,54 @@ const CollabRoom = ({ roomId, roomMetadata, users, currentUserType }: Collaborat
 
   return (
     <RoomProvider id={roomId}>
-      <ClientSideSuspense fallback={<div><Loader /></div>}>
-        <div className='collaborative-room'>
+      <ClientSideSuspense fallback={<Loader />}>
+        <div className="collaborative-room">
           <Header>
-            <div ref={containerRef} className='flex w-fit items-center justify-center gap-2'>
-              {/* <p className='document-title'>
-              A Static Page
-            </p> */}
-              {/* //TODO: add dynamic block for title */}
+            <div ref={containerRef} className="flex w-fit items-center justify-center gap-2">
               {editing && !loading ? (
-                <Input
-                  className='document-title-input'
-                  type='text'
+                <Input 
+                  type="text"
                   value={doctitle}
                   ref={inputRef}
-                  placeholder='Enter title'
+                  placeholder="Enter title"
                   onChange={(e) => setdoctitle(e.target.value)}
                   onKeyDown={updateTitleHandler}
                   disabled={!editing}
+                  className="document-title-input"
                 />
               ) : (
                 <>
-                  <p className='document-title'>{doctitle}</p>
+                  <p className="document-title">{doctitle}</p>
                 </>
               )}
 
               {currentUserType === 'editor' && !editing && (
-                <Image
-                  src={editImg}
-                  alt='edit-title'
-                  width={20}
-                  height={20}
+                <Image 
+                  src="/assets/icons/edit.svg"
+                  alt="edit"
+                  width={24}
+                  height={24}
                   onClick={() => setediting(true)}
-                  className='pointer'
+                  className="pointer"
                 />
               )}
 
               {currentUserType !== 'editor' && !editing && (
-                <p className='view-only-tag'>View Only</p>
+                <p className="view-only-tag">View only</p>
               )}
-              
-              {loading && <p className='text-sm text-white'>Updating please wait...</p>}
-            </div>
 
-            <div className='flex w-full flex-1 justify-end gap-3'>
+              {loading && <p className="text-sm text-gray-400">saving...</p>}
+            </div>
+            <div className="flex w-full flex-1 justify-end gap-2 sm:gap-3">
               <ActiveCollabs />
-              <ShareModal
+
+              <ShareModal 
                 roomId={roomId}
                 collaborators={users}
-                currentUserType={currentUserType}
                 creatorId={roomMetadata.creatorId}
+                currentUserType={currentUserType}
               />
+
               <SignedOut>
                 <SignInButton />
               </SignedOut>
@@ -123,15 +120,8 @@ const CollabRoom = ({ roomId, roomMetadata, users, currentUserType }: Collaborat
                 <UserButton />
               </SignedIn>
             </div>
-
-
           </Header>
-          <Editor
-            roomId={roomId}
-            // users={users}
-            currentUserType={currentUserType}
-          />
-
+        <Editor roomId={roomId} currentUserType={currentUserType} />
         </div>
       </ClientSideSuspense>
     </RoomProvider>

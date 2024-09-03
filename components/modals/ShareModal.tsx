@@ -16,11 +16,11 @@ const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: Share
   const [loading, setLoading] = useState(false);
 
   const [email, setEmail] = useState('');
-  const [userRole, setUserRole] = useState<UserType>('viewer');
+  const [userType, setUserType] = useState<UserType>('viewer');
 
   const shareDocHandler = async () => {
     setLoading(true);
-    await updateDocumentAccess({ roomId, email, userType: userRole as UserType, updatedBy: user.info });
+    await updateDocumentAccess({ roomId, email, userType: userType as UserType, updatedBy: user.info });
 
     setLoading(false);
   }
@@ -63,8 +63,8 @@ const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: Share
               className='share-input'
             />
             <UserTypesSelector
-              userType={userRole}
-              setUserType={setUserRole}
+              userType={userType}
+              setUserType={setUserType}
             />
           </div>
           <Button
