@@ -12,6 +12,7 @@ import { dateConverter } from '@/lib/utils'
 import { DeleteModal } from '@/components/modals/DeleteModal'
 import Notifications from '@/components/Notifications'
 
+
 const Home = async () => {
   const clerkUser = await currentUser();
   if (!clerkUser) redirect('/sign-in');
@@ -19,11 +20,16 @@ const Home = async () => {
   // instead of static documents, we will fetch the documents from the server liveblocks
   const roomDoc = await fetchDocument(clerkUser.emailAddresses[0].emailAddress);
 
+ 
+
+
+
   return (
+
     <main className='home-container'>
       <Header className='sticky left-0 top-0'>
         <div className='flex items-center gap-2 lg:gap-4'>
-          <Notifications />
+         <Notifications />
           <SignedIn>
             <UserButton />
           </SignedIn>
@@ -40,7 +46,7 @@ const Home = async () => {
             />
           </div>
           <ul className='document-ul'>
-            {roomDoc.data.map(({ id, metadata, createdAt, creatorId }: any) => (
+            {roomDoc.data.map(({ id, metadata, createdAt }: any) => (
               <li
                 className='document-list-item'
                 key={id}>
@@ -63,11 +69,10 @@ const Home = async () => {
                     <p className='text-sm font-light text-blue-200'>
                       Created At <span dangerouslySetInnerHTML={{ __html: dateConverter(createdAt) }} />
                     </p>
+                    {/* <p className='text-sm font-light text-blue-200'>Created @ {dateConverter(createdAt)}</p> */}
                   </div>
                 </Link>
-                {clerkUser.id === creatorId && (
-                  <DeleteModal roomId={id} currentUserId={clerkUser.id} creatorId={creatorId} />
-                )}
+             <DeleteModal roomId={id} />
               </li>
             ))}
           </ul>
@@ -86,6 +91,8 @@ const Home = async () => {
             email={clerkUser.emailAddresses[0].emailAddress}
           />
         </div>
+
+
       )}
     </main>
   )
