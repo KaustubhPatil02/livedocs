@@ -18,16 +18,16 @@ import FloatingToolbarPlugin from './plugins/FloatingToolbarPlugin';
 import { useThreads } from '@liveblocks/react/suspense';
 import Comments from '../Comments';
 import { DeleteModal } from '../modals/DeleteModal';
+import { useUser } from '@clerk/nextjs';
 
-// Catch any errors that occur during Lexical updates and log them
-// or throw them as needed. If you don't throw them, Lexical will
-// try to recover gracefully without losing user data.
+type UserType = 'editor' | 'viewer';
 
 function Placeholder() {
   return <div className="editor-placeholder">Well what are you waiting for? Start Typing!..</div>;
 }
 
-export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { roomId: string, currentUserId: string, creatorId: string, currentUserType: UserType }) {
+export function Editor({ roomId, currentUserId, currentUserType }: { roomId: string, currentUserId: string, currentUserType: UserType }) {
+  const { user: clerkUser, isLoaded } = useUser();
   const status = useEditorStatus();
   const { threads } = useThreads();
 
@@ -42,12 +42,20 @@ export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { 
     editable: currentUserType === 'editor',
   });
 
+  if (!isLoaded) {
+    return <Loader />;
+  }
+
+  const creatorId = clerkUser?.id;
+
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <div className="editor-container size-full">
         <div className="toolbar-wrapper flex min-w-full justify-between">
           <ToolbarPlugin />
-          {currentUserId === creatorId && <DeleteModal roomId={roomId} creatorId={creatorId} currentUserId={currentUserId}/>}
+          {currentUserId === creatorId && (
+            <DeleteModal roomId={roomId} creatorId={creatorId} currentUserId={currentUserId} />
+          )}
         </div>
 
         <div className="editor-wrapper flex flex-col items-center justify-start">

@@ -8,13 +8,27 @@ import {
 import { InboxNotification, InboxNotificationList, LiveblocksUIConfig } from "@liveblocks/react-ui"
 import { useInboxNotifications, useUnreadInboxNotificationsCount } from "@liveblocks/react/suspense"
 import Image from "next/image"
-import { ReactNode } from "react"
+import { ReactNode, useState } from "react"
+import '../styles/notifications.css'; // Import the custom CSS file
 
 const Notifications = () => {
   const { inboxNotifications } = useInboxNotifications();
   const { count } = useUnreadInboxNotificationsCount();
+  const [readNotifications, setReadNotifications] = useState<string[]>([]);
 
-  const unreadNotifications = inboxNotifications.filter((notification) => !notification.readAt);
+  const handleNotificationClick = (notificationId: string) => {
+    // Mark the notification as read
+    setReadNotifications((prev) => [...prev, notificationId]);
+    console.log(`Notification ${notificationId} clicked`);
+  };
+
+  const handleClearNotifications = () => {
+    // Clear all notifications
+    setReadNotifications(inboxNotifications.map(notification => notification.id));
+    console.log('All notifications cleared');
+  };
+
+  const unreadNotifications = inboxNotifications.filter((notification) => !notification.readAt && !readNotifications.includes(notification.id));
 
   return (
     <Popover>
@@ -25,11 +39,11 @@ const Notifications = () => {
           width={24}
           height={24}
         />
-        {count > 0 && (
+        {count > 0 && unreadNotifications.length > 0 && (
           <div className="absolute right-2 top-2 z-20 size-2 rounded-full bg-blue-500" />
         )}
       </PopoverTrigger>
-      <PopoverContent align="end" className="shad-popover">
+      <PopoverContent align="end" className="shad-popover max-h-96 overflow-y-auto custom-scrollbar">
         <LiveblocksUIConfig 
           overrides={{
             INBOX_NOTIFICATION_TEXT_MENTION: (user: ReactNode) => (
@@ -37,18 +51,28 @@ const Notifications = () => {
             )
           }}
         >
+          <div className="flex justify-between items-center p-2">
+            <span className="text-sm font-semibold text-white">Notifications</span>
+            <button 
+              className="text-sm text-blue-500 hover:underline"
+              onClick={handleClearNotifications}
+            >
+              Clear All
+            </button>
+          </div>
           <InboxNotificationList>
-            {unreadNotifications.length <= 0 && (
+            {inboxNotifications.length <= 0 && (
               <p className="py-2 text-center text-dark-500">No new notifications</p>
             )}
 
-            {unreadNotifications.length > 0 && unreadNotifications.map((notification) => (
+            {inboxNotifications.length > 0 && inboxNotifications.map((notification) => (
               <InboxNotification 
                 key={notification.id}
                 inboxNotification={notification}
                 className="bg-dark-200 text-white"
                 href={`/documents/${notification.roomId}`}
                 showActions={false}
+                onClick={() => handleNotificationClick(notification.id)}
                 kinds={{
                   thread: (props) => (
                     <InboxNotification.Thread {...props} 
