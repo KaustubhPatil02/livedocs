@@ -46,7 +46,7 @@ const Home = async () => {
             />
           </div>
           <ul className='document-ul'>
-            {roomDoc.data.map(({ id, metadata, createdAt }: any) => (
+            {roomDoc.data.map(({ id, metadata, createdAt, currentUserId }: any) => (
               <li
                 className='document-list-item'
                 key={id}>
@@ -69,10 +69,9 @@ const Home = async () => {
                     <p className='text-sm font-light text-blue-200'>
                       Created At <span dangerouslySetInnerHTML={{ __html: dateConverter(createdAt) }} />
                     </p>
-                    {/* <p className='text-sm font-light text-blue-200'>Created @ {dateConverter(createdAt)}</p> */}
                   </div>
                 </Link>
-             <DeleteModal roomId={id} />
+             <DeleteModal roomId={id} currentUserId={currentUserId} creatorId={''} />
               </li>
             ))}
           </ul>

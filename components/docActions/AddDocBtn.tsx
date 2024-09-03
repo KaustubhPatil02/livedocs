@@ -24,7 +24,7 @@ const AddDocBtn = ({ userId, email }: AddDocumentBtnProps) => {
   };
 
   return (
-    <ConfettiButton className='bg-transparent'>
+    // <ConfettiButton className='bg-transparent'>
       <Button
         type='submit'
         onClick={addDocumentHandler}
@@ -47,7 +47,7 @@ const AddDocBtn = ({ userId, email }: AddDocumentBtnProps) => {
           </>
         )}
       </Button>
-    </ConfettiButton>
+    // </ConfettiButton>
   );
 };
 
