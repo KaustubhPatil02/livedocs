@@ -22,9 +22,25 @@ import { DeleteModal } from '../modals/DeleteModal';
 // Catch any errors that occur during Lexical updates and log them
 // or throw them as needed. If you don't throw them, Lexical will
 // try to recover gracefully without losing user data.
+import DOMPurify from 'dompurify';
+import { $getRoot, $getSelection } from 'lexical';
 
 function Placeholder() {
   return <div className="editor-placeholder">Well what are you waiting for? Start Typing!..</div>;
+}
+
+function sanitizePastedContent(event: ClipboardEvent) {
+  event.preventDefault();
+  const clipboardData = event.clipboardData;
+  const text = clipboardData?.getData('text/plain') || '';
+  const html = clipboardData?.getData('text/html') || '';
+
+  // Sanitize HTML or fallback to plain text
+  const sanitizedContent = html ? DOMPurify.sanitize(html) : text;
+
+  // Insert sanitized content into the editor
+  $getRoot().select();
+  $getSelection()?.insertText(sanitizedContent);
 }
 
 export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { roomId: string, currentUserId: string, creatorId: string, currentUserType: UserType }) {
@@ -47,12 +63,15 @@ export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { 
       <div className="editor-container size-full">
         <div className="toolbar-wrapper flex min-w-full justify-between">
           <ToolbarPlugin />
-          {currentUserId === creatorId && <DeleteModal roomId={roomId} creatorId={creatorId} currentUserId={currentUserId}/>}
+          {currentUserId === creatorId && <DeleteModal roomId={roomId} creatorId={creatorId} currentUserId={currentUserId} />}
         </div>
 
         <div className="editor-wrapper flex flex-col items-center justify-start">
           {status === 'not-loaded' || status === 'loading' ? <Loader /> : (
-            <div className="editor-inner min-h-[1100px] relative mb-5 h-fit w-full max-w-[800px] shadow-md lg:mb-10">
+            <div
+              className="editor-inner min-h-[1100px] relative mb-5 h-fit w-full max-w-[800px] shadow-md lg:mb-10"
+              onPaste={sanitizePastedContent} // Attach paste handler
+            >
               <RichTextPlugin
                 contentEditable={
                   <ContentEditable className="editor-input h-full" />
@@ -76,3 +95,52 @@ export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { 
     </LexicalComposer>
   );
 }
+// export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { roomId: string, currentUserId: string, creatorId: string, currentUserType: UserType }) {
+//   const status = useEditorStatus();
+//   const { threads } = useThreads();
+
+//   const initialConfig = liveblocksConfig({
+//     namespace: 'Editor',
+//     nodes: [HeadingNode],
+//     onError: (error: Error) => {
+//       console.error(error);
+//       throw error;
+//     },
+//     theme: Theme,
+//     editable: currentUserType === 'editor',
+//   });
+
+//   return (
+//     <LexicalComposer initialConfig={initialConfig}>
+//       <div className="editor-container size-full">
+//         <div className="toolbar-wrapper flex min-w-full justify-between">
+//           <ToolbarPlugin />
+//           {currentUserId === creatorId && <DeleteModal roomId={roomId} creatorId={creatorId} currentUserId={currentUserId}/>}
+//         </div>
+
+//         <div className="editor-wrapper flex flex-col items-center justify-start">
+//           {status === 'not-loaded' || status === 'loading' ? <Loader /> : (
+//             <div className="editor-inner min-h-[1100px] relative mb-5 h-fit w-full max-w-[800px] shadow-md lg:mb-10">
+//               <RichTextPlugin
+//                 contentEditable={
+//                   <ContentEditable className="editor-input h-full" />
+//                 }
+//                 placeholder={<Placeholder />}
+//                 ErrorBoundary={LexicalErrorBoundary}
+//               />
+//               {currentUserType === 'editor' && <FloatingToolbarPlugin />}
+//               <HistoryPlugin />
+//               <AutoFocusPlugin />
+//             </div>
+//           )}
+
+//           <LiveblocksPlugin>
+//             <FloatingComposer className="w-[350px]" />
+//             <FloatingThreads threads={threads} />
+//             <Comments />
+//           </LiveblocksPlugin>
+//         </div>
+//       </div>
+//     </LexicalComposer>
+//   );
+// }

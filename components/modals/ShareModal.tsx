@@ -12,99 +12,120 @@ import { updateDocumentAccess } from '@/lib/actions/room.actions';
 
 const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: ShareDocumentDialogProps) => {
   const user = useSelf();
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [email, setEmail] = useState('');
   const [userType, setUserType] = useState<UserType>('viewer');
+  const [error, setError] = useState<string | null>(null);
+
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const shareDocHandler = async () => {
-    setLoading(true);
-    await updateDocumentAccess({ roomId, email, userType: userType as UserType, updatedBy: user.info });
+    if (!isValidEmail(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
 
-    setLoading(false);
-  }
+    setLoading(true);
+    setError(null); // Clear any previous errors
+    try {
+      await updateDocumentAccess({ roomId, email, userType: userType as UserType, updatedBy: user.info });
+      setEmail(''); // Clear the email input after successful sharing
+    } catch (error) {
+      console.error('Error sharing document:', error);
+      setError('Failed to share the document. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button className='gradient-green flex h-9 gap-1 px-4'
-          disabled={currentUserType !== 'editor'}>
+        <Button
+          className="gradient-green flex h-9 gap-1 px-4"
+          disabled={currentUserType !== 'editor'}
+          aria-label="Open share modal"
+        >
           <Image
-            src='/assets/icons/share.svg'
-            alt='Share document icon'
+            src="/assets/icons/share.svg"
+            alt="Share document icon"
             width={20}
             height={20}
-            className='min-w-4 md:size-6'
+            className="min-w-4 md:size-6"
           />
-          <p className='mr-1 hidden sm:block'>Share</p>
+          <p className="mr-1 hidden sm:block">Share</p>
         </Button>
       </DialogTrigger>
-      <DialogContent className='shad-dialog'>
-        <DialogHeader >
-          <DialogTitle>Manage share permissions</DialogTitle>
+      <DialogContent className="shad-dialog">
+        <DialogHeader>
+          <DialogTitle>Manage Share Permissions</DialogTitle>
           <DialogDescription>
-            With whom you want to share this document?
+            Share this document with others by entering their email and selecting their role.
           </DialogDescription>
         </DialogHeader>
-        <Label
-          htmlFor='email'
-          className='mt-7 text-blue-200'
-        >
-          Email address
-        </Label>
-        <div className='flex items-center gap-2'>
-          <div className='flex flex-1 rounded-md b bg-dark-400'>
-            <Input
-              id='email'
-              placeholder='Enter email address'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className='share-input'
-            />
-            <UserTypesSelector
-              userType={userType}
-              setUserType={setUserType}
-            />
-          </div>
-          <Button
-            className='gradient-blue flex h-full gap-1 px-4'
-            disabled={loading}
-            type='submit'
-            onClick={shareDocHandler}
-          >
-            {loading ? 'Sharing...' : 'Share'}
-          </Button>
-        </div>
-        <div className='my-2 space-y-2'>
-          <ul className='flex flec-col'>
-            {collaborators.map((collaborator) => (
-              // static code
-              // <li key={collaborator.id} className='flex items-center gap-2'>
-              //   <Image
-              //     src='/assets/icons/user.svg'
-              //     alt='User icon'
-              //     width={20}
-              //     height={20}
-              //     className='min-w-4 md:size-6'
-              //   />
-              //   <p className='text-blue-200'>{collaborator.email}</p>
-              // </li>
-              <Collaborator
-                key={collaborator.id}
-                roomId={roomId}
-                creatorId={creatorId}
-                email={collaborator.email}
-                collaborator={collaborator}
-                user={user.info}
+        <div className="mt-4">
+          <Label htmlFor="email" className="text-blue-200">
+            Email Address
+          </Label>
+          <div className="flex items-center gap-2 mt-2">
+            <div className="flex flex-1 rounded-md bg-dark-400">
+              <Input
+                id="email"
+                placeholder="Enter email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="share-input"
+                aria-label="Email address input"
               />
-            ))}
-          </ul>
+              <UserTypesSelector
+                userType={userType}
+                setUserType={setUserType}
+              />
+            </div>
+            <Button
+              className="gradient-blue flex h-full gap-1 px-4"
+              disabled={loading || !email}
+              type="submit"
+              onClick={shareDocHandler}
+              aria-label="Share document"
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="spinner" /> Sharing...
+                </span>
+              ) : (
+                'Share'
+              )}
+            </Button>
+          </div>
+          {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
         </div>
+        <div className="mt-6">
+  <h3 className="text-lg font-semibold text-blue-200">Collaborators</h3>
+  <ul className="mt-3 space-y-2">
+    {collaborators.map((collaborator) => (
+      <li
+        key={collaborator.id}
+        className="flex items-center gap-4 justify-between rounded-md bg-dark-400 p-4 shadow-sm"
+      >
+        <Collaborator
+          roomId={roomId}
+          creatorId={creatorId}
+          email={collaborator.email}
+          collaborator={collaborator}
+          user={user.info}
+        />
+      </li>
+    ))}
+  </ul>
+</div>
       </DialogContent>
     </Dialog>
+  );
+};
 
-  )
-}
-
-export default ShareModal
+export default ShareModal;
