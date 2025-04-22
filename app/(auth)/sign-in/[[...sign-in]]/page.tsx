@@ -14,7 +14,7 @@ const SignInPage = () => {
       />
       {/* <div> */}
       <div className="flex flex-col items-center gap-6 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-blue-50 drop-shadow-xl">
+        <h1 className="text-5xl font-bold tracking-tight text-blue-50 drop-shadow-xl">
           Welcome again to LiveDocs ✨
         </h1>
         <p className="text-xl font-medium text-blue-200">

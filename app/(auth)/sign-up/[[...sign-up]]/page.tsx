@@ -14,10 +14,10 @@ const SignUpPage = () => {
 
       {/* Content Section */}
       <div className="flex flex-col items-center gap-6 text-center">
-  <h1 className="text-4xl font-bold tracking-tight text-blue-50 drop-shadow-xl">
+  <h1 className="text-5xl font-bold tracking-tight text-blue-50 drop-shadow-xl">
     Welcome to LiveDocs ✨
   </h1>
-  <p className="text-sm font-semibold text-blue-200">
+  <p className="text-xl font-semibold text-blue-200">
     LiveDocs✨ is a live collaborative editor powered by LiveBlocks.
   </p>
   <p className="text-sm font-medium text-blue-200">
