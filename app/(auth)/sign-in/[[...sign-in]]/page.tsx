@@ -20,7 +20,7 @@ const SignInPage = () => {
           LiveDocs✨ is a live collaborative editor powered by LiveBlocks.
         </p>
         <p className="text-xl  text-blue-100 font-semibold">
-          Let's Log you in and start collaborating in real-time.
+          Let`&apos;`s Log you in and start collaborating in real-time.
         </p>
       </div>
     <SignIn />
