@@ -42,7 +42,7 @@ const AddDocBtn = ({ userId, email }: AddDocumentBtnProps) => {
               height={20}
             />
             <p className='hidden sm:block'>
-              Create a blank document!
+              Create a New document!
             </p>
           </>
         )}
