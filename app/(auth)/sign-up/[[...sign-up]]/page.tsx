@@ -20,7 +20,7 @@ const SignUpPage = () => {
   <p className="text-xl font-medium text-blue-200">
     Create your account and start collaborating in real-time.
   </p>
-  <p className="text-base font-light text-blue-300">
+  <p className="text-sm font-semibold text-blue-200">
     LiveDocs✨ is a live collaborative editor powered by LiveBlocks.
   </p>
         {/* Sign-Up Form */}

@@ -13,13 +13,13 @@ const SignInPage = () => {
       />
       {/* <div> */}
       <div className="flex flex-col items-center gap-6 text-center">
-        <h1 className="text-5xl font-extrabold tracking-tight text-blue-100 drop-shadow-lg">
+        <h1 className="text-6xl font-bold tracking-tight text-blue-50 drop-shadow-xl">
           Welcome again to LiveDocs ✨
         </h1>
-        <p className="text-sm font-light text-blue-300">
+        <p className="text-sm font-medium text-blue-200">
           LiveDocs✨ is a live collaborative editor powered by LiveBlocks.
         </p>
-        <p className="text-lg font-light text-blue-200">
+        <p className="text-xl  text-blue-100 font-semibold">
           Let's Log you in and start collaborating in real-time.
         </p>
       </div>
