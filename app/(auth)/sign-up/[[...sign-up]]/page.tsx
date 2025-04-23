@@ -30,7 +30,7 @@ const SignUpPage = () => {
           href="/hero"
           className="text-blue-400 hover:underline text-sm font-medium"
         >
-          Click here to see what this is actually, if you don't have any idea
+          Click here to see what this is actually, if you don&#39't have any idea
         </Link>
 
         {/* Sign-Up Form */}
