@@ -37,7 +37,7 @@ const Notifications = () => {
           <div className="absolute right-2 top-2 z-20 size-2 rounded-full bg-blue-500" />
         )}
       </PopoverTrigger>
-      <PopoverContent align="end" className="shad-popover max-h-96 overflow-y-auto custom-scrollbar">
+      <PopoverContent align="end" className="shad-popover max-h-96 max-w-96 overflow-y-auto custom-scrollbar">
         <LiveblocksUIConfig 
           overrides={{
             INBOX_NOTIFICATION_TEXT_MENTION: (user: ReactNode) => (
