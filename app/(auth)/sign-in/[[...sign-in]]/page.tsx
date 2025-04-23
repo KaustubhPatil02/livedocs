@@ -1,4 +1,4 @@
-import { AnimatedGridPattern } from '@/components/magicui/animated-grid-pattern'
+import { GridPattern } from '@/components/magicui/grid-pattern'
 import { SignIn } from '@clerk/nextjs'
 import Image from 'next/image'
 import React from 'react'
@@ -7,7 +7,7 @@ const SignInPage = () => {
   return (
     <main className='auth-page mt-4'>
       
-      <AnimatedGridPattern
+      <GridPattern
         className="absolute -z-10 opacity-30 fill-blue-900"
         width={100}
         height={100}

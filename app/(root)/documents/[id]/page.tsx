@@ -4,6 +4,8 @@ import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { getDocument } from '@/lib/actions/room.actions';
 import { getClerkUsers } from '@/lib/actions/users.actions';
+import Header from '@/components/docActions/Header';
+import { GridPattern } from '@/components/magicui/grid-pattern';
 
 const Document = async ({ params: { id } }: SearchParamProps) => {
   const clerkUser = await currentUser();
@@ -40,6 +42,11 @@ const Document = async ({ params: { id } }: SearchParamProps) => {
 
   return (
     <main className="flex w-full flex-col items-center">
+    <GridPattern
+       className="absolute -z-10 opacity-15 fill-blue-900"
+       width={100}
+       height={100}
+    />
       <CollabRoom
         roomId={id}
         roomMetadata={room.metadata}

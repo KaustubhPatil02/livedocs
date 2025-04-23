@@ -28,7 +28,7 @@ const AddDocBtn = ({ userId, email }: AddDocumentBtnProps) => {
       <Button
         type='submit'
         onClick={addDocumentHandler}
-        className={`gradient-green flex gap-1 shadow-md ${loading ? 'opacity-50' : ''}`}
+        className={` mt-2 gradient-green flex gap-1 hover:bg-transparent shadow-md ${loading ? 'opacity-50' : ''}`}
         disabled={loading}
       >
         {loading ? (
@@ -41,7 +41,7 @@ const AddDocBtn = ({ userId, email }: AddDocumentBtnProps) => {
               width={20}
               height={20}
             />
-            <p className='hidden sm:block'>
+            <p className=''>
               Create a New document!
             </p>
           </>
