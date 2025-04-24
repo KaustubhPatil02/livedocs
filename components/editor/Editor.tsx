@@ -1,76 +1,123 @@
 'use client';
 
-import Theme from './plugins/Theme';
-import ToolbarPlugin from './plugins/ToolbarPlugin';
-import { HeadingNode } from '@lexical/rich-text';
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary';
-import React from 'react';
-
-import { FloatingComposer, FloatingThreads, liveblocksConfig, LiveblocksPlugin, useEditorStatus } from '@liveblocks/react-lexical';
-import Loader from '../Loader';
-
-import FloatingToolbarPlugin from './plugins/FloatingToolbarPlugin';
-import { useThreads } from '@liveblocks/react/suspense';
-import Comments from '../Comments';
-import { DeleteModal } from '../modals/DeleteModal';
-
-// Catch any errors that occur during Lexical updates and log them
-// or throw them as needed. If you don't throw them, Lexical will
-// try to recover gracefully without losing user data.
+import React, { useCallback } from 'react';
 import DOMPurify from 'dompurify';
 import { $getRoot, $getSelection } from 'lexical';
 
+import {
+  HeadingNode,
+} from '@lexical/rich-text';
+import {
+  LexicalComposer,
+} from '@lexical/react/LexicalComposer';
+import {
+  RichTextPlugin,
+} from '@lexical/react/LexicalRichTextPlugin';
+import {
+  ContentEditable,
+} from '@lexical/react/LexicalContentEditable';
+import {
+  HistoryPlugin,
+} from '@lexical/react/LexicalHistoryPlugin';
+import {
+  AutoFocusPlugin,
+} from '@lexical/react/LexicalAutoFocusPlugin';
+import {
+  LexicalErrorBoundary,
+} from '@lexical/react/LexicalErrorBoundary';
+
+import {
+  FloatingComposer,
+  FloatingThreads,
+  liveblocksConfig,
+  LiveblocksPlugin,
+  useEditorStatus,
+} from '@liveblocks/react-lexical';
+import { useThreads } from '@liveblocks/react/suspense';
+
+import Theme from './plugins/Theme';
+import ToolbarPlugin from './plugins/ToolbarPlugin';
+import FloatingToolbarPlugin from './plugins/FloatingToolbarPlugin';
+
+import Loader from '../Loader';
+import Comments from '../Comments';
+import { DeleteModal } from '../modals/DeleteModal';
+
+type UserType = 'viewer' | 'editor';
+
 function Placeholder() {
-  return <div className="editor-placeholder">Well what are you waiting for? Start Typing!..</div>;
+  return (
+    <div className="editor-placeholder">
+      Well what are you waiting for? Start Typing!..
+    </div>
+  );
 }
 
-function sanitizePastedContent(event: ClipboardEvent) {
+const sanitizePastedContent = (event: ClipboardEvent) => {
   event.preventDefault();
+
   const clipboardData = event.clipboardData;
-  const text = clipboardData?.getData('text/plain') || '';
-  const html = clipboardData?.getData('text/html') || '';
+  if (!clipboardData) return;
 
-  // Sanitize HTML or fallback to plain text
-  const sanitizedContent = html ? DOMPurify.sanitize(html) : text;
+  const text = clipboardData.getData('text/plain') || '';
+  const html = clipboardData.getData('text/html') || '';
+  const sanitized = html ? DOMPurify.sanitize(html) : text;
 
-  // Insert sanitized content into the editor
+  const selection = $getSelection();
   $getRoot().select();
-  $getSelection()?.insertText(sanitizedContent);
-}
+  selection?.insertText(sanitized);
+};
 
-export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { roomId: string, currentUserId: string, creatorId: string, currentUserType: UserType }) {
+export function Editor({
+  roomId,
+  currentUserId,
+  creatorId,
+  currentUserType,
+}: {
+  roomId: string;
+  currentUserId: string;
+  creatorId: string;
+  currentUserType: UserType;
+}) {
   const status = useEditorStatus();
   const { threads } = useThreads();
 
   const initialConfig = liveblocksConfig({
     namespace: 'Editor',
+    theme: Theme,
     nodes: [HeadingNode],
+    editable: currentUserType === 'editor',
     onError: (error: Error) => {
       console.error(error);
       throw error;
     },
-    theme: Theme,
-    editable: currentUserType === 'editor',
   });
+
+  const handlePaste = useCallback(sanitizePastedContent, []);
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <div className="editor-container size-full">
-        <div className="toolbar-wrapper flex min-w-full justify-between">
+        {/* Toolbar Section */}
+        <div className="toolbar-wrapper flex max-w-full justify-between">
           <ToolbarPlugin />
-          {currentUserId === creatorId && <DeleteModal roomId={roomId} creatorId={creatorId} currentUserId={currentUserId} />}
+          {currentUserId === creatorId && (
+            <DeleteModal
+              roomId={roomId}
+              creatorId={creatorId}
+              currentUserId={currentUserId}
+            />
+          )}
         </div>
 
+        {/* Editor + Comments Section */}
         <div className="editor-wrapper flex flex-col items-center justify-start">
-          {status === 'not-loaded' || status === 'loading' ? <Loader /> : (
+          {status === 'not-loaded' || status === 'loading' ? (
+            <Loader />
+          ) : (
             <div
               className="editor-inner min-h-[1100px] relative mb-5 h-fit w-full max-w-[800px] shadow-md lg:mb-10"
-              onPaste={sanitizePastedContent} // Attach paste handler
+              onPaste={handlePaste}
             >
               <RichTextPlugin
                 contentEditable={
@@ -85,62 +132,18 @@ export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { 
             </div>
           )}
 
+          {/* Liveblocks Section */}
           <LiveblocksPlugin>
-            <FloatingComposer className="w-[350px]" />
-            <FloatingThreads threads={threads} />
-            <Comments />
+            {/* Desktop-only live features container */}
+            <div className="hidden lg:flex flex-col gap-4 fixed right-5 top-[140px] w-[350px] z-20">
+              <FloatingComposer />
+              <FloatingThreads threads={threads} />
+              <Comments />
+            </div>
           </LiveblocksPlugin>
+
         </div>
       </div>
     </LexicalComposer>
   );
 }
-// export function Editor({ roomId, currentUserId, creatorId, currentUserType }: { roomId: string, currentUserId: string, creatorId: string, currentUserType: UserType }) {
-//   const status = useEditorStatus();
-//   const { threads } = useThreads();
-
-//   const initialConfig = liveblocksConfig({
-//     namespace: 'Editor',
-//     nodes: [HeadingNode],
-//     onError: (error: Error) => {
-//       console.error(error);
-//       throw error;
-//     },
-//     theme: Theme,
-//     editable: currentUserType === 'editor',
-//   });
-
-//   return (
-//     <LexicalComposer initialConfig={initialConfig}>
-//       <div className="editor-container size-full">
-//         <div className="toolbar-wrapper flex min-w-full justify-between">
-//           <ToolbarPlugin />
-//           {currentUserId === creatorId && <DeleteModal roomId={roomId} creatorId={creatorId} currentUserId={currentUserId}/>}
-//         </div>
-
-//         <div className="editor-wrapper flex flex-col items-center justify-start">
-//           {status === 'not-loaded' || status === 'loading' ? <Loader /> : (
-//             <div className="editor-inner min-h-[1100px] relative mb-5 h-fit w-full max-w-[800px] shadow-md lg:mb-10">
-//               <RichTextPlugin
-//                 contentEditable={
-//                   <ContentEditable className="editor-input h-full" />
-//                 }
-//                 placeholder={<Placeholder />}
-//                 ErrorBoundary={LexicalErrorBoundary}
-//               />
-//               {currentUserType === 'editor' && <FloatingToolbarPlugin />}
-//               <HistoryPlugin />
-//               <AutoFocusPlugin />
-//             </div>
-//           )}
-
-//           <LiveblocksPlugin>
-//             <FloatingComposer className="w-[350px]" />
-//             <FloatingThreads threads={threads} />
-//             <Comments />
-//           </LiveblocksPlugin>
-//         </div>
-//       </div>
-//     </LexicalComposer>
-//   );
-// }
