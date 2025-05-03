@@ -1,4 +1,5 @@
 'use client'
+import emailjs from 'emailjs-com';
 import { useSelf } from '@liveblocks/react/suspense'
 import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
@@ -23,25 +24,66 @@ const ShareModal = ({ roomId, currentUserType, collaborators, creatorId }: Share
     return emailRegex.test(email);
   };
 
+  // const shareDocHandler = async () => {
+  //   if (!isValidEmail(email)) {
+  //     setError('Please enter a valid email address.');
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   setError(null); // Clear any previous errors
+  //   try {
+  //     await updateDocumentAccess({ roomId, email, userType: userType as UserType, updatedBy: user.info });
+  //     setEmail(''); // Clear the email input after successful sharing
+  //   } catch (error) {
+  //     console.error('Error sharing document:', error);
+  //     setError('Failed to share the document. Please try again.');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const shareDocHandler = async () => {
     if (!isValidEmail(email)) {
       setError('Please enter a valid email address.');
+      console.log('Invalid email:', email);
       return;
     }
-
+  
     setLoading(true);
     setError(null); // Clear any previous errors
     try {
+      console.log('Recipient email:', email);
+  
+      // Update document access
       await updateDocumentAccess({ roomId, email, userType: userType as UserType, updatedBy: user.info });
+  
+      // Send email notification using EmailJS
+      const templateParams = {
+        to_email: email, // Recipient's email
+        room_id: roomId, // Room ID
+        user_type: userType, // User role
+        sender_name: user.info.name || 'A collaborator', // Sender's name
+        document_url: `https://livedocs-draf.vercel.app/documents/${roomId}`, // URL of the document
+      };
+  
+      console.log('Template Params:', templateParams);
+  
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        templateParams,
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+      );
+  
       setEmail(''); // Clear the email input after successful sharing
     } catch (error) {
-      console.error('Error sharing document:', error);
-      setError('Failed to share the document. Please try again.');
+      console.error('Error sharing document or sending email:', error);
+      setError('Failed to share the document or send the email. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
